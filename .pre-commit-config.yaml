@@ -1,0 +1,22 @@
+default_install_hook_types: [pre-commit, pre-push]
+
+repos:
+  # Ruff - linting and formatting (pre-commit)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  # Local hooks
+  - repo: local
+    hooks:
+      # MyPy - type checking (pre-commit)
+      - id: mypy
+        name: mypy
+        entry: uv run mypy server.py parks.py
+        language: system
+        types: [python]
+        files: ^(server|parks)\.py$
+        pass_filenames: false
