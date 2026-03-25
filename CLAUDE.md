@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
+uv sync               # Install dependencies (first-time setup)
 uv run poe serve      # Run MCP server
 uv run poe dev        # Run in development mode (FastMCP dev server)
 uv run poe test       # Run all tests
@@ -15,9 +16,11 @@ uv run poe format     # Format code with ruff
 uv run pytest tests/test_parks.py::TestGetParkId::test_exact_match -v
 ```
 
+Pre-commit hooks run ruff (lint + format) and mypy automatically on commit.
+
 ## Architecture
 
-This is a FastMCP server that proxies the queue-times.com API for theme park wait times.
+This is a FastMCP server that proxies the queue-times.com API for theme park wait times. Source files live at the repo root (no `src/` directory).
 
 **parks.py** - Park registry and lookup functions. Contains `PARKS` dict mapping park names to IDs/groups, plus helper functions (`get_park_id`, `get_park_name`, `get_parks_by_group`, `list_all_parks`). Pure functions with no external dependencies.
 
@@ -27,7 +30,7 @@ This is a FastMCP server that proxies the queue-times.com API for theme park wai
 - `get_wait_times_by_id` - Lookup by queue-times.com ID
 - `get_all_wait_times` - Fetch all parks in a group in parallel
 
-The `format_wait_times()` function transforms API responses into a cleaner structure.
+The `format_wait_times()` function transforms API responses into a cleaner structure. Tests use `asyncio_mode = "auto"` so async test functions are detected automatically.
 
 ## API Attribution
 
